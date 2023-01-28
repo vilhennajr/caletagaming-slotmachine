@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateSettings1674914510799 implements MigrationInterface {
+export class CreateGameParams1674915991110 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'settings',
+        name: 'game_params',
         columns: [
           {
             name: 'id',
@@ -14,16 +14,16 @@ export class CreateSettings1674914510799 implements MigrationInterface {
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'name',
-            type: 'varchar',
-          },
-          {
-            name: 'key',
+            name: 'symbol',
             type: 'varchar',
             isUnique: true,
           },
           {
             name: 'value',
+            type: 'int',
+          },
+          {
+            name: 'weight',
             type: 'int',
           },
           {
@@ -42,6 +42,6 @@ export class CreateSettings1674914510799 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('settings');
+    await queryRunner.dropTable('game_params');
   }
 }

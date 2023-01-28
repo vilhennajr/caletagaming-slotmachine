@@ -5,7 +5,7 @@ import Setting from '../infra/typeorm/entities/Setting';
 import { ISettingRepository } from '../domain/repositories/ISettingsRepository';
 
 @injectable()
-class UpdatePlayerService {
+class UpdateSettingService {
 
   constructor(
 
@@ -34,4 +34,4 @@ class UpdatePlayerService {
   }
 }
 
-export default UpdatePlayerService;
+export default UpdateSettingService;
