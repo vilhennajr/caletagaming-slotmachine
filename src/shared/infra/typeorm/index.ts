@@ -7,6 +7,8 @@ import GameParam from '@modules/gameparams/infra/typeorm/entities/GameParam';
 import { CreatePlayers1673552480543 } from './migrations/1673552480543-CreatePlayers';
 import { CreateSettings1674914510799 } from './migrations/1674914510799-CreateSettings';
 import { CreateGameParams1674915991110 } from './migrations/1674915991110-CreateGameParams';
+import { CreateMatches1674918753012 } from './migrations/1674918753012-CreateMatches';
+import { AddPlayerIdToMatches1674918899058 } from './migrations/1674918899058-AddPlayerIdToMatches';
 
 export const dataSource = new DataSource({
   type: 'postgres',
@@ -20,5 +22,7 @@ export const dataSource = new DataSource({
     CreatePlayers1673552480543,
     CreateSettings1674914510799,
     CreateGameParams1674915991110,
+    CreateMatches1674918753012,
+    AddPlayerIdToMatches1674918899058,
   ],
 });
