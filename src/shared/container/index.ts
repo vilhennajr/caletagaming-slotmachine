@@ -9,6 +9,9 @@ import SettingsRepository from '@modules/settings/infra/typeorm/repositories/Set
 import { IGameParamRepository } from '@modules/gameparams/domain/repositories/IGameParamsRepository';
 import GameParamsRepository from '@modules/gameparams/infra/typeorm/repositories/GameParamsRepository';
 
+import { IMatcheRepository } from '@modules/matches/domain/repositories/IMatchesRepository';
+import MatchesRepository from '@modules/matches/infra/typeorm/repositories/MatchesRepository';
+
 container.registerSingleton<IPlayerRepository>(
   'PlayersRepository',
   PlayersRepository,
@@ -22,4 +25,9 @@ container.registerSingleton<ISettingRepository>(
 container.registerSingleton<IGameParamRepository>(
   'GameParamsRepository',
   GameParamsRepository,
+);
+
+container.registerSingleton<IMatcheRepository>(
+  'MatchesRepository',
+  MatchesRepository,
 );
