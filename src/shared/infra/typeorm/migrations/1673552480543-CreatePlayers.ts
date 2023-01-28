@@ -27,6 +27,11 @@ export class CreatePlayers1673552480543 implements MigrationInterface {
             type: 'varchar',
           },
           {
+            name: 'balance',
+            type: 'int',
+            default: 0
+          },
+          {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',

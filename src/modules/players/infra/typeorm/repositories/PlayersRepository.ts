@@ -14,9 +14,9 @@ class PlayerRepository implements IPlayerRepository {
     this.ormRepository = dataSource.getRepository(Player);
   }
 
-  public async create({ name, email, password }: ICreatePlayer): Promise<Player> {
+  public async create({ name, email, password, balance }: ICreatePlayer): Promise<Player> {
 
-    const player = this.ormRepository.create({ name, email, password });
+    const player = this.ormRepository.create({ name, email, password, balance });
 
     await this.ormRepository.save(player);
 

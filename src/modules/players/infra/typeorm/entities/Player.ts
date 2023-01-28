@@ -19,6 +19,9 @@ class Player {
   email: string;
 
   @Column()
+  balance?: number;
+
+  @Column()
   @Exclude()
   password: string;
 
