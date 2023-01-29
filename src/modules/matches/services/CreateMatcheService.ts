@@ -1,6 +1,6 @@
 import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
-import { IMatche } from '../domain/models/IMatche';
+import { IPlayMatche } from '../domain/models/IPlayMatche';
 import { ICreateMatche } from '../domain/models/ICreateMatche';
 import { IMatcheRepository } from '../domain/repositories/IMatchesRepository';
 import { IPlayerRepository } from '@modules/players/domain/repositories/IPlayersRepository';
@@ -52,18 +52,16 @@ class CreateMatcheService {
   public async execute({
     player_id,
     bet,
-    win,
-    lose,
-  }: ICreateMatche): Promise<IMatche> {
+  }: ICreateMatche): Promise<IPlayMatche> {
 
     //GET DEFAULT INVESTMENT AMOUNT PER MATCH
     const settings = await this.settingsRepository.findByKey('DEFAULT_INVESTMENT');
 
     //VERIFY IF THE PLAYER HAS BALANCE TO PLAY THE MATCH
-    const isBlance = await this.playersRepository.findById(player_id);
+    const player = await this.playersRepository.findById(player_id);
 
-    if (Number(isBlance?.balance) <= Number(settings ? settings.value : 0)) {
-      throw new AppError('Player without enough balance.');
+    if ((Number(player?.balance) < Number(settings ? settings.value : 0)) || !(Number(bet) <= Number(player?.balance)) ) {
+      throw new AppError(`Player without enough balance. $${player?.balance}`);
     }
 
     //GET GAME PARAMETERS
@@ -89,26 +87,32 @@ class CreateMatcheService {
     const isMatche = resulfinal.filter((e, i, a) => a.indexOf(e) !== i)
     var  match = Number(isMatche.length) === 2 ? true : false
 
-    console.log('result', {
-      ramdon: [{
-        columnOne: resulfinal[0],
-        columnTwo: resulfinal[1],
-        columnThree: resulfinal[2]
-      }],
-      isMatche: match,
-      amount: match ? gameparams.find(sku => sku.symbol === resulfinal[0])?.value : 0
-    })
+    // UPDATE BALANCE PLAYER
+    if(player){
+      player.balance = (Number(player?.balance) - Number(settings ? settings.value : 0)) + (Number(match ? gameparams.find(value => value.symbol === resulfinal[0])?.value : 0));
+      await this.playersRepository.save(player);
+    }
 
     //CREATE MATCHE
-
     const matche = await this.matchesRepository.create({
       player_id,
       bet,
-      win,
-      lose,
+      win: Number(match ? gameparams.find(value => value.symbol === resulfinal[0])?.value : 0),
+      lose: Number(settings ? settings.value : 0),
     });
 
-    return matche;
+    return {
+      player: {
+        balance: Number(player?.balance) + Number(match ? gameparams.find(value => value.symbol === resulfinal[0])?.value : 0),
+      },
+      ramdon: {
+        columnOne: resulfinal[0],
+        columnTwo: resulfinal[1],
+        columnThree: resulfinal[2]
+      },
+      isMatche: match,
+      won: Number(match ? gameparams.find(value => value.symbol === resulfinal[0])?.value : 0)
+    };
   }
 }
 

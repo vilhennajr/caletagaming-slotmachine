@@ -25,8 +25,6 @@ matchesRouter.post(
     [Segments.BODY]: {
       player_id: Joi.string().uuid().required(),
       bet: Joi.number().required(),
-      win: Joi.number().required(),
-      lose: Joi.number().required(),
     },
   }),
   matchesController.create,
