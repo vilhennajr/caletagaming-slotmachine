@@ -28,8 +28,9 @@ export class CreatePlayers1673552480543 implements MigrationInterface {
           },
           {
             name: 'balance',
-            type: 'int',
-            default: 0
+            type: 'decimal',
+            precision: 10,
+            scale: 2,
           },
           {
             name: 'created_at',

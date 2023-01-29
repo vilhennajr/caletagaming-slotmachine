@@ -46,6 +46,15 @@ class GameParamRepository implements IGameParamRepository {
     await this.ormRepository.remove(gameparam);
   }
 
+  public async find(): Promise<GameParam[]> {
+    const gameparam = this.ormRepository.find({
+      order: {
+        symbol: "ASC",
+      },
+    });
+    return gameparam;
+  }
+
   public async findAll({
     page,
     skip,

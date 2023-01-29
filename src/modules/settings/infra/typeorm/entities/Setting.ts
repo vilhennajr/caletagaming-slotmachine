@@ -17,7 +17,7 @@ class Setting {
   @Column()
   key: string;
 
-  @Column()
+  @Column('decimal')
   value: number;
 
   @CreateDateColumn()

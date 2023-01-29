@@ -24,7 +24,9 @@ export class CreateSettings1674914510799 implements MigrationInterface {
           },
           {
             name: 'value',
-            type: 'int',
+            type: 'decimal',
+            precision: 10,
+            scale: 2,
           },
           {
             name: 'created_at',

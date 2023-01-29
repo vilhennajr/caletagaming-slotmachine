@@ -13,6 +13,7 @@ export interface IGameParamRepository {
   create(data: ICreateGameParam): Promise<IGameParam>;
   save(player: IGameParam): Promise<IGameParam>;
   findAll({ page, skip, take }: SearchParams): Promise<IGameParamPaginate>;
+  find(): Promise<IGameParam[]>;
   findById(id: string): Promise<IGameParam | null>;
   remove(player: IGameParam): Promise<void>;
 }

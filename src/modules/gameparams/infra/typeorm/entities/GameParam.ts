@@ -14,10 +14,10 @@ class GameParam {
   @Column()
   symbol: string;
 
-  @Column()
+  @Column('decimal')
   value: number;
 
-  @Column()
+  @Column('decimal')
   weight: number;
 
   @CreateDateColumn()

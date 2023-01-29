@@ -18,7 +18,7 @@ class Player {
   @Column()
   email: string;
 
-  @Column()
+  @Column('decimal')
   balance?: number;
 
   @Column()

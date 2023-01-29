@@ -21,13 +21,13 @@ class Matche {
   @JoinColumn({ name: 'player_id' })
   player: Player;
 
-  @Column()
+  @Column('decimal')
   bet: number;
 
-  @Column()
+  @Column('decimal')
   win: number;
 
-  @Column()
+  @Column('decimal')
   lose: number;
 
   @CreateDateColumn()

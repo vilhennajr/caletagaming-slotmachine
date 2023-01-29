@@ -17,7 +17,7 @@ export const dataSource = new DataSource({
   port: 5432,
   username: 'postgres',
   password: 'root',
-  database: 'caletagaming-slotmachine2',
+  database: 'caletagaming-slotmachine3',
   entities: [Player, Setting, GameParam, Matche],
   migrations: [
     CreatePlayers1673552480543,
