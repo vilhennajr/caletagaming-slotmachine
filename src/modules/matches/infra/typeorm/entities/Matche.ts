@@ -27,9 +27,6 @@ class Matche {
   @Column('decimal')
   win: number;
 
-  @Column('decimal')
-  lose: number;
-
   @CreateDateColumn()
   created_at: Date;
 

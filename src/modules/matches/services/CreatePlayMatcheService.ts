@@ -31,7 +31,7 @@ const randomItem = (array: string[], distribution: number[]) => {
 };
 
 @injectable()
-class CreateMatcheService {
+class CreatePlayMatcheService {
 
   constructor(
 
@@ -56,40 +56,55 @@ class CreateMatcheService {
 
     //GET DEFAULT INVESTMENT AMOUNT PER MATCH
     const settings = await this.settingsRepository.findByKey('DEFAULT_INVESTMENT');
-
-    //VERIFY IF THE PLAYER HAS BALANCE TO PLAY THE MATCH
-    const player = await this.playersRepository.findById(player_id);
-
-    if ((Number(player?.balance) < Number(settings ? settings.value : 0)) || !(Number(bet) <= Number(player?.balance)) ) {
-      throw new AppError(`Player without enough balance. $${player?.balance}`);
-    }
+    const defaultInvestment = settings ? Number(settings.value) : 0;
 
     //GET GAME PARAMETERS
     const gameparams = await this.gameparamsRepository.find();
 
+    //VERIFY IF THE PLAYER HAS BALANCE TO PLAY THE MATCH
+    const player = await this.playersRepository.findById(player_id);
+
+    if (!player) {
+      throw new AppError('Player not found.');
+    }
+
+    if (bet < defaultInvestment) {
+      throw new AppError(`Minimum amount to bet is $${defaultInvestment}`);
+    }
+
+    const balance = player ? Number(player?.balance) : 0;
+
+    if (!(Number(bet) <= balance)) {
+      throw new AppError(`Player without enough balance. $${balance}`);
+    }
+
+
     //PLAY-RUN SCRIPT RANDOMLY WITH PROBABILITY
-    const mapGameParamsSymbol = gameparams.map(function(item, indice){
+    const gameParamsSymbol = gameparams.map(function(item, indice){
       return item.symbol
     });
 
-    const mapGameParamsWeight = gameparams.map(function(item, indice){
+    const gameParamsWeight = gameparams.map(function(item, indice){
       return Number(item.weight)
     });
 
-    const distribution = createDistribution(mapGameParamsWeight, 3);
+    const distribution = createDistribution(gameParamsWeight, 3);
 
     var resulfinal: string[] = [];
 
     for (let i = 0; i < 3; ++i) {
-      resulfinal.push(randomItem(mapGameParamsSymbol, distribution))
+      resulfinal.push(randomItem(gameParamsSymbol, distribution))
     }
 
     const isMatche = resulfinal.filter((e, i, a) => a.indexOf(e) !== i)
     var  match = Number(isMatche.length) === 2 ? true : false
 
+    const payTableValue = Number(match ? gameparams.find(value => value.symbol === resulfinal[0])?.value : 0);
+    const newBalance =  (balance - bet) + (payTableValue);
+
     // UPDATE BALANCE PLAYER
     if(player){
-      player.balance = (Number(player?.balance) - Number(settings ? settings.value : 0)) + (Number(match ? gameparams.find(value => value.symbol === resulfinal[0])?.value : 0));
+      player.balance = newBalance;
       await this.playersRepository.save(player);
     }
 
@@ -97,23 +112,22 @@ class CreateMatcheService {
     const matche = await this.matchesRepository.create({
       player_id,
       bet,
-      win: Number(match ? gameparams.find(value => value.symbol === resulfinal[0])?.value : 0),
-      lose: Number(settings ? settings.value : 0),
+      win: payTableValue,
     });
 
     return {
       player: {
-        balance: Number(player?.balance) + Number(match ? gameparams.find(value => value.symbol === resulfinal[0])?.value : 0),
+        balance: newBalance,
       },
-      ramdon: {
+      slotmachine_result: {
         columnOne: resulfinal[0],
         columnTwo: resulfinal[1],
         columnThree: resulfinal[2]
       },
       isMatche: match,
-      won: Number(match ? gameparams.find(value => value.symbol === resulfinal[0])?.value : 0)
+      won: payTableValue
     };
   }
 }
 
-export default CreateMatcheService;
+export default CreatePlayMatcheService;

@@ -14,9 +14,9 @@ class MatcheRepository implements IMatcheRepository {
     this.ormRepository = dataSource.getRepository(Matche);
   }
 
-  public async create({ player_id, bet, win, lose }: ICreateMatche): Promise<Matche> {
+  public async create({ player_id, bet, win }: ICreateMatche): Promise<Matche> {
 
-    const matche = this.ormRepository.create({ player_id, bet, win, lose });
+    const matche = this.ormRepository.create({ player_id, bet, win });
 
     await this.ormRepository.save(matche);
 

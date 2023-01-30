@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
-import CreateMatcheService from '../../../services/CreateMatcheService';
+import CreatePlayMatcheService from '../../../services/CreatePlayMatcheService';
 import ListMatcheService from '../../../services/ListMatcheService';
 import ShowMatcheService from '../../../services/ShowMatcheService';
 import { classToClass } from 'class-transformer';
@@ -34,16 +34,14 @@ export default class MatchesController {
       player_id,
       bet,
       win,
-      lose,
     } = request.body;
 
-    const createMatche = container.resolve(CreateMatcheService);
+    const createMatche = container.resolve(CreatePlayMatcheService);
 
     const matche = await createMatche.execute({
       player_id,
       bet,
       win,
-      lose,
     });
 
     return response.json(classToClass(matche));

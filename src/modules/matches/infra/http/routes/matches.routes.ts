@@ -20,7 +20,7 @@ matchesRouter.get(
 );
 
 matchesRouter.post(
-  '/',
+  '/play',
   celebrate({
     [Segments.BODY]: {
       player_id: Joi.string().uuid().required(),

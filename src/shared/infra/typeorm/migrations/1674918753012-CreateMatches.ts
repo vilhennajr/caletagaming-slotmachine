@@ -26,12 +26,6 @@ export class CreateMatches1674918753012 implements MigrationInterface {
             scale: 2,
           },
           {
-            name: 'lose',
-            type: 'decimal',
-            precision: 10,
-            scale: 2,
-          },
-          {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',

@@ -2,7 +2,7 @@ export interface IPlayMatche {
   player: {
     balance: number
   }
-  ramdon: {
+  slotmachine_result: {
     columnOne: string,
     columnTwo: string[1],
     columnThree: string[2]

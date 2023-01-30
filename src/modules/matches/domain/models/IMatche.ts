@@ -6,7 +6,6 @@ export interface IMatche {
   player: IPlayer
   bet: number;
   win: number;
-  lose: number;
   created_at: Date;
   updated_at: Date;
 }
